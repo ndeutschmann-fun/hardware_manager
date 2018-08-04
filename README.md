@@ -1,1 +1,1 @@
-# hardware_manager
+# hardware manager for RPi
