@@ -10,9 +10,10 @@ class HardwareManager(object):
     """
 
     @staticmethod #return the current time since epoch in miliseconds
-    current_milli_time = lambda: int(round(time.time() * 1000))
+    def current_milli_time():
+        return int(round(time.time() * 1000))
 
-    def __init__(self,*args,name="HM",**opts):
+    def __init__(self,name="HM",*args,**opts):
         self.components={}
         self.last_update=self.current_milli_time
         try:
