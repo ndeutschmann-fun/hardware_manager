@@ -12,11 +12,17 @@ class HardwareManager(object):
     * last_update: the time since the last call of self.update()
     """
 
-    @staticmethod #return the current time since epoch in miliseconds
+    @staticmethod
     def current_milli_time():
+        """return the current time since epoch in miliseconds"""
         return int(round(time.time() * 1000))
 
     def __init__(self,component_list=[],name="HM",mode=GPIO.BCM,*args,**opts):
+        """Optional arguments:
+        * Component object list
+        * name for the Manager
+        * GPIO board mode to access the Pins
+        """
         self.last_update=self.current_milli_time
         self.mode=mode
         GPIO.setmode(mode)
