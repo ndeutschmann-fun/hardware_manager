@@ -6,7 +6,7 @@ class VirtualComponent(object):
         self.GPIOs={}
 
     def update(self,*args,**kwargs):
-        return NotImplemented
+        pass
 
     def __call__(self, *args, **kwargs):
         return NotImplemented

@@ -1,10 +1,13 @@
 import time
 
+import RPi.GPIO as GPIO
+
 
 class HardwareManager(object):
     """A class that handles a list of harware elements
     Attributes are:
     * name: the name of the manager
+    * mode: the GPIO mode
     * components: a dictionnary of Components, accessed by name
     * last_update: the time since the last call of self.update()
     """
@@ -13,13 +16,13 @@ class HardwareManager(object):
     def current_milli_time():
         return int(round(time.time() * 1000))
 
-    def __init__(self,name="HM",*args,**opts):
-        self.components={}
+    def __init__(self,component_list=[],name="HM",mode=GPIO.BCM,*args,**opts):
         self.last_update=self.current_milli_time
-        try:
-            self.name=str(name)
-        except TypeError:
-            raise TypeError("A Hardware Manager name should be a string")
+        self.mode=mode
+        GPIO.setmode(mode)
+        self.name=name
+        for component in component_list:
+            self.add_component(component)
     def add_component(self,component):
         """Add a Component in the Manager component list."""
         if component.name in self.components:
@@ -32,6 +35,8 @@ class HardwareManager(object):
         for component in self.components.values():
             component.update(delay=dt)
 
+    def cleanup(self):
+        GPIO.cleanup()
 
 
 
