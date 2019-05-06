@@ -1,1 +1,1 @@
-from RPi.GPIO.definitions import *
+from hardware_manager.RPi.GPIO.definitions import *

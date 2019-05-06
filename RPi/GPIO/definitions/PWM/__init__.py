@@ -1,1 +1,1 @@
-from RPi.GPIO.definitions.PWM.PWM import *
+from hardware_manager.RPi.GPIO.definitions.PWM.PWM import *

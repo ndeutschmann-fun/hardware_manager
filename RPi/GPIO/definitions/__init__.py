@@ -1,3 +1,3 @@
-from RPi.GPIO.definitions.PWM import *
-from RPi.GPIO.definitions.constants import *
-from RPi.GPIO.definitions.functions import *
+from hardware_manager.RPi.GPIO.definitions.PWM import *
+from hardware_manager.RPi.GPIO.definitions.constants import *
+from hardware_manager.RPi.GPIO.definitions.functions import *
