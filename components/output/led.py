@@ -9,7 +9,6 @@ LED_program: a LED with a blinking program TODO
 
 """
 
-
 import hardware_manager.components.virtual_component as virtual_component
 import hardware_manager.components.pin as pin
 
@@ -38,7 +37,7 @@ class LED(virtual_component.Component):
 
     def switch(self):
         """Flip the LED"""
-        print "flipping led"
+        print("flipping led")
         self[0].flip()
 
     def update(self, ignore=True, *args, **kwargs):

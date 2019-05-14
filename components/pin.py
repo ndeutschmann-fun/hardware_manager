@@ -1,5 +1,4 @@
 from hardware_manager.RPi import GPIO
-#import RPi.GPIO as GPIO release version
 
 class Pin(object):
     """Representation of a physical pin on the board"""
