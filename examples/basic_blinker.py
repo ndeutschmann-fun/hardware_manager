@@ -21,7 +21,7 @@ def blink():
         if (H.current_milli_time()-t0)%100 == 0:
             if do_print:
                 print("Time elapsed: {}".format(H.current_milli_time()-t0))
-                print("Blinker LED status: {}\n".format(H['blinker']()))
+                print("Blinker LED status: {}\n".format(H.status['blinker']))
                 do_print = False
         else:
             do_print = True

@@ -22,6 +22,8 @@ class Component(object):
         there are no conflicts.
     """
 
+    has_status = False
+
     def __init__(self, name, *args, **kwargs):
         """Basic initialization of a virtual component
 
@@ -45,7 +47,7 @@ class Component(object):
         self.GPIOs = {}
 
     def update(self, ignore=True, *args, **kwargs):
-        """Collect the status of input Pins and whatever data is available.
+        """Do the standard periodic interaction with the component (data I/O etc)
 
         In this virtual class, a NotImplemented Error is raised by default since it should do nothing.
 
@@ -56,6 +58,11 @@ class Component(object):
             pass
         else:
             raise NotImplementedError("This Component is not updatable. It can be safely called using the ignore=True option.")
+
+    def status(self):
+        """Return the internally stored status of the component obtained through update"""
+        raise NotImplementedError("""This component does not have a status.\n
+                                  Did you setup this class' has_status attribute properly?""")
 
     def __getitem__(self, item):
         """Access the component's GPIO dictionnary
