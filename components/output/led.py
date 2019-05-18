@@ -15,7 +15,10 @@ import hardware_manager.components.pin as pin
 
 class LED(virtual_component.Component):
     """A LED that can be turned on or off"""
-    def __init__(self, name, pin_id, initial_state=pin.GPIO.LOW, activate=True):
+    # A led has a status
+    has_status = True
+
+    def __init__(self, name, pin_id, initial_state=pin.GPIO.LOW, activate=True, explicit_updates=False, update_rate=100):
         """Creator for a basic LED
 
         Args:
@@ -26,6 +29,11 @@ class LED(virtual_component.Component):
         """
         virtual_component.Component.__init__(self, name, type="LED")
         self[0] = pin.Pin(pin_id, mode=pin.GPIO.OUT, initial_state=initial_state, activate=activate)
+        if explicit_updates:
+            self.update_rate = update_rate
+        else:
+            self.update_rate = -1.
+
 
     def on(self):
         """Turn the LED on"""
@@ -40,17 +48,18 @@ class LED(virtual_component.Component):
         print("flipping led")
         self[0].flip()
 
-    def update(self, ignore=True, *args, **kwargs):
-        """No need to update basic leds"""
-        pass
+    def update(self, delay=0., *args, **kwargs):
+        """Update can do sparse consistency checks by checking the pin status explicitly"""
+        if 0 < self.update_rate < delay:
+            self[0].update()
 
-    def __call__(self):
+    def status(self):
         """Return the current status"""
         return self[0].state
 
 class LED_blink(LED):
     """A LED that blinks with a given period"""
-    def __init__(self,name, pin_id, period=1000 , initial_state=False, activate=True):
+    def __init__(self,name, pin_id, period=1000 , initial_state=False, activate=True, explicit_updates=False, update_rate=100):
         """Creator for a blinking light
 
         Args:
@@ -60,9 +69,9 @@ class LED_blink(LED):
             initial_state:
             activate:
         """
-        LED.__init__(self,name, pin_id, initial_state=pin.GPIO.LOW, activate=True)
+        LED.__init__(self, name, pin_id, initial_state=pin.GPIO.LOW, activate=activate, explicit_updates=explicit_updates, update_rate=update_rate)
         self.period = period
-        self.status = activate
+        self.activate = activate
         self.time_elapsed = 0.
         self.running = initial_state
         if self.running:
@@ -70,8 +79,9 @@ class LED_blink(LED):
         else:
             self.off()
 
-    def update(self,delay=0.):
+    def update(self,delay=0., *args, **kwargs):
         """Get the time since the last call from the manager and flip the LED if necessary"""
+        LED.update(self, delay=delay)
         if self.running:
             self.time_elapsed+=delay
             if self.time_elapsed>self.period:
@@ -79,13 +89,13 @@ class LED_blink(LED):
                 self.time_elapsed=0
 
     def start_running(self):
-        "Start blinking"
+        """Start blinking"""
         self.running = True
 
     def stop_running(self):
-        "Stop blinking"
+        """Stop blinking"""
         self.running = False
 
     def toggle_running(self):
-        "Toggle running mode"
+        """Toggle running mode"""
         self.running = not self.running

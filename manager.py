@@ -28,6 +28,7 @@ class HardwareManager(object):
         GPIO.setmode(mode)
         self.name=name
         self.components = {}
+        self.status = {}
         for component in component_list:
             self.add_component(component)
 
@@ -37,6 +38,8 @@ class HardwareManager(object):
             raise NameError("This component name is already used in Hardware Manager "+self.name+"")
         else:
             self.components[component.name]=component
+            if component.has_status:
+                self.status[component.name]=component.status()
 
     def update(self):
         """Update all components. Pass delay since last check to components"""
@@ -44,7 +47,10 @@ class HardwareManager(object):
         self.last_update += dt
         for component in self.components.values():
             component.update(delay=dt)
+            if component.has_status:
+                self.status[component.name] = component.status()
 
+    @staticmethod
     def cleanup(self):
         GPIO.cleanup()
 
